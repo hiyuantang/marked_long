@@ -269,7 +269,7 @@ def main_worker(gpu, ngpus_per_node, args):
 
     # define loss function (criterion) and optimizer
     # criterion = nn.CrossEntropyLoss().cuda(args.gpu)
-    criterion = nn.BCELoss().cuda(args.gpu)
+    criterion = nn.BCEWithLogitsLoss().cuda(args.gpu)
 
     optimizer = torch.optim.SGD(model.parameters(), args.lr,
                                 momentum=args.momentum,
@@ -412,16 +412,16 @@ def train(train_loader, model, criterion, optimizer, epoch, args, writer, iterat
     for i, (images, target) in enumerate(train_loader):
         # measure data loading time
 
-        np_images = images.cpu().detach().numpy()
-        np_target = target.cpu().detach().numpy()
+        #np_image = image.cpu().detach().numpy()
+        #np_target = target.cpu().detach().numpy()
 
         # for image, target in zip(np_images, np_target)
         
         # Save These images onto Disk (~/DeSaLab/segmentation_benchmark/semseg/vis)
-        images_path = "./DeSaLab/segmentation_benchmark/semseg/vis/images/images[{}].npy".format(i)
-        target_path = "./DeSaLab/segmentation_benchmark/semseg/vis/targets/targets[{}].npy".format(i)
-        np.save(images_path, np_images)
-        np.save(target_path, np_target)
+        #image_path = "./vis/images/image[{}].npy".format(i)
+        #target_path = "./vis/targets/target[{}].npy".format(i)
+        #np.save(image_path, np_image)
+        #np.save(target_path, np_target)
 
         data_time.update(time.time() - end)
         # adjust learning rate at every step with warmup + cosine LR decay

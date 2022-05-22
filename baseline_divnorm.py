@@ -35,7 +35,7 @@ class BaselineDivNorm(nn.Module):
         
         self.fc1 = nn.Linear(in_features=self.inplanes, out_features=self.inplanes) 
         self.fc2 = nn.Linear(in_features=self.inplanes, out_features=1)
-        self.sig = nn.Sigmoid()
+        #self.sig = nn.Sigmoid()
         
     def forward(self, x):
 
@@ -59,7 +59,7 @@ class BaselineDivNorm(nn.Module):
 
         x = self.fc1(x)
         x = self.fc2(x)
-        x = self.sig(x)
+        #x = self.sig(x)
 
         return x
 
