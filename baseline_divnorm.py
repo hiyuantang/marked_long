@@ -16,12 +16,12 @@ class BaselineDivNorm(nn.Module):
         self.inplanes = 64
         self.batch_size = 1024
 
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=self.inplanes, padding=1, kernel_size=3)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=self.inplanes, padding=6, kernel_size=13)
         self.bn1 = nn.BatchNorm2d(self.inplanes)
         if self.divnorm: self.div1 = DivNormExcInh(self.inplanes)
         self.relu1 = nn.ReLU(inplace=False)
        
-        self.conv2 = nn.Conv2d(in_channels=self.inplanes, out_channels=self.inplanes, padding=1, kernel_size=3)
+        self.conv2 = nn.Conv2d(in_channels=self.inplanes, out_channels=self.inplanes, padding=3, kernel_size=7)
         self.bn2 = nn.BatchNorm2d(self.inplanes)
         if self.divnorm: self.div2 = DivNormExcInh(self.inplanes)
         self.relu2 = nn.ReLU(inplace=False)
