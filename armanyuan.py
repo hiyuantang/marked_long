@@ -227,7 +227,7 @@ def main_worker(gpu, ngpus_per_node, args):
         print("=> creating model: '{}' | DivNormLayers: {}".format(args.arch, div_norm_choice))
         model = BaselineDivNorm(div_norm_choice)
     elif str(args.arch) == "resnet50":
-        model = models.resnet50(pretrained=False, num_classes=1)
+        model = models.resnet50(pretrained=False, num_classes=2)
     else:
         print("Non-Baseline Models Not Available")
         raise NotImplementedError
@@ -269,7 +269,7 @@ def main_worker(gpu, ngpus_per_node, args):
 
     # define loss function (criterion) and optimizer
     # criterion = nn.CrossEntropyLoss().cuda(args.gpu)
-    criterion = nn.BCEWithLogitsLoss().cuda(args.gpu)
+    criterion = nn.CrossEntropyLoss(reduction='mean').cuda(args.gpu)
 
     optimizer = torch.optim.SGD(model.parameters(), args.lr,
                                 momentum=args.momentum,
@@ -440,7 +440,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, writer, iterat
             output = torch.squeeze(output)
             target = target.to(torch.float32)
             ###
-            if args.arch == "resnet50": output = F.sigmoid(output)
+            #if args.arch == "resnet50": output = F.sigmoid(output)
             loss = criterion(output, target)
 
             # RELEASE below lines for no nan loss training
@@ -453,12 +453,12 @@ def train(train_loader, model, criterion, optimizer, epoch, args, writer, iterat
         #           loss)
 
         # measure accuracy and record loss
-        acc1 = accuracy(output, target)
+        acc1, acc5 = accuracy(output, target, topk=(1, 1))
         # acc1 = torch.sum(torch.round(output) == target).item() / target.size(0)
         # print("Train | Epoch[" + str(epoch) + "]" + " | " + "Batch[" + str(i) + "]" + " | " + str(acc1))
         losses.update(loss.item(), images.size(0))
-        top1.update(acc1, images.size(0))
-        # top5.update(acc5[0], images.size(0))
+        top1.update(acc1[0], images.size(0))
+        top5.update(acc5[0], images.size(0))
 
         scaler.scale(loss).backward()
         scaler.step(optimizer)
@@ -528,19 +528,20 @@ def validate(val_loader, model, criterion, optimizer, epoch, args):
 
             output = model(images)
             ###
-            output = torch.squeeze(output)
-            target = target.to(torch.float32)
+            #output = torch.squeeze(output)
+            #target = target.to(torch.float32)
             ###
-            if args.arch == "resnet50": output = F.sigmoid(output)
+            #if args.arch == "resnet50": output = F.sigmoid(output)
             loss = criterion(output, target)
 
             # measure accuracy and record loss
-            acc1 = accuracy(output, target)
+
+            acc1, acc5 = accuracy(output, target, topk=(1, 1))
             # acc1 = torch.sum(torch.round(output) == target).item() / target.size(0)
             # print("Validation | Epoch[" + str(epoch) + "]" + " | " + "Batch[" + str(i) + "]" + " | " + str(acc1))
             losses.update(loss.item(), images.size(0))
-            top1.update(acc1, images.size(0))
-            # top5.update(acc5[0], images.size(0))
+            top1.update(acc1[0], images.size(0))
+            top5.update(acc5[0], images.size(0))
 
             # measure elapsed time
             batch_time.update(time.time() - end)
@@ -618,24 +619,23 @@ def adjust_learning_rate_cosine(args, optimizer, loader, step):
     optimizer.param_groups[0]['lr'] = lr * args.lr
     
 
-def accuracy(output, target):
+def accuracy(output, target, topk=(1,)):
     """Computes the accuracy over the k top predictions for the specified values of k"""
     with torch.no_grad():
-        # maxk = max(topk)
-        # batch_size = target.size(0)
+        #acc1 = torch.sum(torch.round(output) == target) / target.size(0)
+        #return acc1
+        maxk = max(topk)
+        batch_size = target.size(0)
 
-        acc1 = torch.sum(torch.round(output) == target) / target.size(0)
-        return acc1
+        _, pred = output.topk(maxk, 1, True, True)
+        pred = pred.t()
+        correct = pred.eq(target.view(1, -1).expand_as(pred))
 
-        # _, pred = output.topk(maxk, 1, True, True)
-        # pred = pred.t()
-        # correct = pred.eq(target.view(1, -1).expand_as(pred))
-
-        # res = []
-        # for k in topk:
-        #     correct_k = correct[:k].reshape(-1).float().sum(0, keepdim=True)
-        #     res.append(correct_k.mul_(100.0 / batch_size))
-        # return res
+        res = []
+        for k in topk:
+            correct_k = correct[:k].reshape(-1).float().sum(0, keepdim=True)
+            res.append(correct_k.mul_(100.0 / batch_size))
+        return res
 
 
 if __name__ == '__main__':

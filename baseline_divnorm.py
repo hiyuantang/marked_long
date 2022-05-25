@@ -34,8 +34,8 @@ class BaselineDivNorm(nn.Module):
         self.aap = nn.AdaptiveAvgPool2d((1,1))  # 1024 * 64 * 1 * 1
         
         self.fc1 = nn.Linear(in_features=self.inplanes, out_features=self.inplanes) 
-        self.fc2 = nn.Linear(in_features=self.inplanes, out_features=1)
-        #self.sig = nn.Sigmoid()
+        self.fc2 = nn.Linear(in_features=self.inplanes, out_features=2)
+ 
         
     def forward(self, x):
 
@@ -51,7 +51,7 @@ class BaselineDivNorm(nn.Module):
 
         x = self.conv3(x)
         x = self.bn3(x)
-        if self.divnorm: x = self.div3(x, )
+        if self.divnorm: x = self.div3(x)
         x = self.relu3(x)
 
         x = self.aap(x)
@@ -59,7 +59,6 @@ class BaselineDivNorm(nn.Module):
 
         x = self.fc1(x)
         x = self.fc2(x)
-        #x = self.sig(x)
 
         return x
 
