@@ -36,12 +36,7 @@ import utils
 from models.baseline_divnorm import *
 from models.baseline_f1 import *
 
-# MarkedLong path: 
-#                   /mnt/cube/projects/contour_integration/markedlong_full/negative
-#                   /mnt/cube/projects/contour_integration/markedlong_full/positive
-
-# Pathfinder path: 
-#                   /mnt/cube/projects/contour_integration/pathfinder_full/curv_contour_length_9
+np.set_printoptions(threshold=np.inf)
 
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
@@ -56,6 +51,7 @@ parser.add_argument('--divei', metavar='DIVEI', type=int, default=0) # 0 = w/o D
 parser.add_argument('--eidiv', metavar='EIDIV', type=int, default=0) # 0 = w/o EIDivNorm, 1 = with EIDivNorm
 parser.add_argument('-l', '--layers', default=3, type=int, 
                     help='only allow for 3, 5, and 7 layers input')         # 3, 5, or 7 layers
+parser.add_argument('--sw', '--store_weights', type=int, default=0)
 parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                     help='number of data loading workers (default: 4)')
 parser.add_argument('--epochs', default=90, type=int, metavar='N',
@@ -71,7 +67,7 @@ parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
                     metavar='LR', help='initial learning rate', dest='lr')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum')
-parser.add_argument('--wd', '--weight-decay', default=1e-4, type=float,
+parser.add_argument('--wd', '--weight-decay', default=1e-3, type=float,
                     metavar='W', help='weight decay (default: 1e-4)',
                     dest='weight_decay')
 parser.add_argument('-p', '--print-freq', default=10, type=int,
@@ -103,6 +99,7 @@ parser.add_argument('--multiprocessing-distributed', action='store_true',
 
 best_acc1 = 0
 global_stats_file = None
+global_weights_file = None
 """NOTE:
 If you are using NCCL backend, remember to set 
 the following environment variables in your Ampere series GPU.
@@ -114,7 +111,10 @@ export NCCL_P2P_DISABLE=1
 export NCCL_SOCKET_IFNAME=lo
 """
 #seed = 56
-seed = 29
+#seed = 29
+seed = 53
+#seed = 77
+#seed = 
 torch.manual_seed(seed)
 np.random.seed(seed)
 
@@ -200,6 +200,7 @@ def main_worker(gpu, ngpus_per_node, args):
         print(' '.join(sys.argv))
         print(str(vars(args)), file=global_stats_file)
         print(' '.join(sys.argv), file=global_stats_file)
+
 
     # create model
     if 'imagenet_100' in args.data:
@@ -364,6 +365,7 @@ def main_worker(gpu, ngpus_per_node, args):
         # train for one epoch
         acc1 = train(train_loader, model, criterion, optimizer, epoch, args, writer=None, iterator=iterator)
         val_acc1, val_acc5 = validate(val_loader, model, criterion, optimizer, epoch, args)
+    
         # remember best acc@1 and save checkpoint
         is_best = val_acc1 > best_acc1
         best_acc1 = max(val_acc1, best_acc1)
@@ -395,6 +397,17 @@ def main_worker(gpu, ngpus_per_node, args):
                 state = dict(epoch=epoch + 1, arch=args.arch, model=model.state_dict(),
                             optimizer=optimizer.state_dict())
                 torch.save(state, '%s/checkpoint_%s.pth' % (args.checkpoint_dir, str(args.arch)))
+        
+        if epoch < args.sw:
+            #store only first twenty epoch weights
+            if not args.multiprocessing_distributed or (args.multiprocessing_distributed
+                    and args.rank == 0):
+                state = dict(epoch=epoch + 1, arch=args.arch, 
+                        acc_train=acc1, 
+                        acc_val=val_acc1, 
+                        model=model.state_dict(),
+                        optimizer=optimizer.state_dict())
+                torch.save(state, "%s/checkpoint_%s_epoch_%s.pth" % (args.checkpoint_dir, str(args.arch), epoch))
         
         if is_best:
             if not args.multiprocessing_distributed or (args.multiprocessing_distributed
@@ -595,8 +608,13 @@ class ProgressMeter(object):
 
 
 def adjust_learning_rate(optimizer, epoch, args):
-    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
-    lr = args.lr * (0.1 ** (epoch // 30))
+    #"""Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
+    #lr = args.lr * (0.1 ** (epoch // 30))
+    #for param_group in optimizer.param_groups:
+    #    param_group['lr'] = lr
+
+    #cancel the learning rate adjustment by using a constant lr
+    lr = args.lr
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 

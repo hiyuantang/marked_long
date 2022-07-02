@@ -72,6 +72,7 @@ class BaselineF1(nn.Module):
         self.pool = nn.AdaptiveMaxPool2d((1,1))
 
         self.fc1 = nn.Linear(in_features=self.inplanes, out_features=512)
+        self.drop = nn.Dropout(p=0.5)
         self.fc2 = nn.Linear(in_features=512, out_features=2)
         #self._initialize_weights()
 
@@ -103,6 +104,7 @@ class BaselineF1(nn.Module):
         x = self.pool(x)
         x = torch.squeeze(x)
         x = self.fc1(x)
+        x = self.drop(x)
         x = self.fc2(x)
 
         return x
