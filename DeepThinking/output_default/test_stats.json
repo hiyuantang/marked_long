@@ -1,0 +1,1 @@
+{"0": {"model": "recur_residual_network_segment_depth=36_width=2", "num_params": 632592, "learning rate": 0.001, "lr_factor": 0.25, "lr": 0.001, "epochs": 160, "train_batch_size": 50, "optimizer": "SGD", "dataset": "mazes_small", "train_acc": 96.938, "test_acc": 95.63, "test_iter": null}, "num entries": 1}
