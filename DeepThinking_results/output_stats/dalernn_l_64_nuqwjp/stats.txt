@@ -1,0 +1,36 @@
+{'checkpoint': 'check_default', 'dataset': 'mazes_large', 'depth': 64, 'epochs': 50, 'lr': 0.002, 'lr_factor': 0.25, 'lr_schedule': [40], 'mode': 'default', 'model': 'dalernn', 'model_path': None, 'no_save_log': False, 'optimizer': 'SGD', 'output': 'output_default', 'problem': 'segment', 'save_json': True, 'save_period': 50, 'test_batch_size': 50, 'test_dataset': None, 'test_iterations': None, 'train_batch_size': 50, 'train_log': 'train_log.txt', 'val_period': 1, 'width': 1, 'stats_file_name': 'dalernn_l_64', 'checkpoint_dir': PosixPath('/home/AD/yutang/DeepThinking-main/output_stats/dalernn_l_64_nuqwjp'), 'global_stats_file': <_io.TextIOWrapper name='/home/AD/yutang/DeepThinking-main/output_stats/dalernn_l_64_nuqwjp/stats.txt' mode='a' encoding='UTF-8'>}
+train_model.py --model dalernn --width 1 --depth 64 --dataset mazes_large --lr 0.002 --lr_factor 0.25 --lr_schedule 40 --epochs 50 --problem segment --save_json --save_period 50 --train_batch_size 50 --stats_file_name dalernn_l_64
+{"model": "dalernn", "num_params": 1291360, "lr_factor": 0.25, "lr": 0.002, "epochs": 50, "train_batch_size": 50, "optimizer": "SGD", "dataset": "mazes_large"}
+{"epoch": 0, "lr_weights": 0.0006593599079287213, "loss": 0.5354068154990673, "acc": 0.0, "train_acc": 0.0, "val_acc": 0.0}
+{"epoch": 1, "lr_weights": 0.0009023767278119472, "loss": 0.4429384583234787, "acc": 0.0, "train_acc": 0.0, "val_acc": 0.0}
+{"epoch": 2, "lr_weights": 0.001101342071765557, "loss": 0.38395547595620155, "acc": 0.014, "train_acc": 0.31, "val_acc": 0.33}
+{"epoch": 3, "lr_weights": 0.002, "loss": 0.29111045198142527, "acc": 0.898, "train_acc": 7.362, "val_acc": 7.37}
+{"epoch": 4, "lr_weights": 0.002, "loss": 0.13334632280282677, "acc": 22.294, "train_acc": 8.626, "val_acc": 8.22}
+{"epoch": 5, "lr_weights": 0.002, "loss": 0.04300532131735235, "acc": 58.266, "train_acc": 51.642, "val_acc": 51.53}
+{"epoch": 6, "lr_weights": 0.002, "loss": 0.020202263282611967, "acc": 76.648, "train_acc": 81.88, "val_acc": 80.63}
+{"epoch": 7, "lr_weights": 0.002, "loss": 0.013973785299807787, "acc": 82.894, "train_acc": 80.988, "val_acc": 80.13}
+{"epoch": 8, "lr_weights": 0.002, "loss": 0.010013483936199918, "acc": 87.02, "train_acc": 87.772, "val_acc": 86.11}
+{"epoch": 9, "lr_weights": 0.002, "loss": 0.008497971123666502, "acc": 89.016, "train_acc": 92.78, "val_acc": 91.59}
+{"epoch": 10, "lr_weights": 0.002, "loss": 0.006942199666169472, "acc": 90.858, "train_acc": 92.698, "val_acc": 91.27}
+{"epoch": 11, "lr_weights": 0.002, "loss": 0.006784355689596851, "acc": 90.924, "train_acc": 93.294, "val_acc": 92.04}
+{"epoch": 12, "lr_weights": 0.002, "loss": 0.006370332806021907, "acc": 91.7, "train_acc": 95.072, "val_acc": 93.72}
+{"epoch": 13, "lr_weights": 0.002, "loss": 0.004818404193618335, "acc": 93.542, "train_acc": 94.378, "val_acc": 92.84}
+{"epoch": 14, "lr_weights": 0.002, "loss": 0.004411194893647916, "acc": 93.994, "train_acc": 94.332, "val_acc": 93.0}
+{"epoch": 15, "lr_weights": 0.002, "loss": 0.003896729818312451, "acc": 94.824, "train_acc": 95.334, "val_acc": 93.92}
+{"epoch": 16, "lr_weights": 0.002, "loss": 0.004243466283049202, "acc": 94.374, "train_acc": 94.674, "val_acc": 93.51}
+{"epoch": 17, "lr_weights": 0.002, "loss": 0.003506409391266061, "acc": 95.346, "train_acc": 96.224, "val_acc": 95.02}
+{"epoch": 18, "lr_weights": 0.002, "loss": 0.003286590226838598, "acc": 95.716, "train_acc": 95.1, "val_acc": 93.62}
+{"epoch": 19, "lr_weights": 0.002, "loss": 0.003089397233969066, "acc": 95.92, "train_acc": 96.298, "val_acc": 94.9}
+{"epoch": 20, "lr_weights": 0.002, "loss": 0.004672482620138908, "acc": 93.95, "train_acc": 95.556, "val_acc": 93.89}
+{"epoch": 21, "lr_weights": 0.002, "loss": 0.0033055116457690018, "acc": 95.542, "train_acc": 94.776, "val_acc": 93.35}
+{"epoch": 22, "lr_weights": 0.002, "loss": 0.0030364033082150854, "acc": 95.912, "train_acc": 96.418, "val_acc": 94.61}
+{"epoch": 23, "lr_weights": 0.002, "loss": 0.0026721079102135265, "acc": 96.622, "train_acc": 96.482, "val_acc": 94.88}
+{"epoch": 24, "lr_weights": 0.002, "loss": 0.00267626485452638, "acc": 96.478, "train_acc": 96.82, "val_acc": 95.07}
+{"epoch": 25, "lr_weights": 0.002, "loss": 0.003468901833955897, "acc": 95.55, "train_acc": 87.938, "val_acc": 86.07}
+{"epoch": 26, "lr_weights": 0.002, "loss": 0.003980207962740678, "acc": 94.818, "train_acc": 96.504, "val_acc": 94.69}
+{"epoch": 27, "lr_weights": 0.002, "loss": 0.0027038076091266705, "acc": 96.362, "train_acc": 97.048, "val_acc": 95.46}
+{"epoch": 28, "lr_weights": 0.002, "loss": 0.0024263022669474593, "acc": 96.806, "train_acc": 97.308, "val_acc": 95.41}
+{"epoch": 29, "lr_weights": 0.002, "loss": 0.002345991185371531, "acc": 96.86, "train_acc": 97.114, "val_acc": 95.52}
+{"epoch": 30, "lr_weights": 0.002, "loss": 0.003735558824497275, "acc": 95.09, "train_acc": 95.074, "val_acc": 93.52}
+{"epoch": 31, "lr_weights": 0.002, "loss": 0.0027138156475848517, "acc": 96.236, "train_acc": 96.778, "val_acc": 94.92}
+{"epoch": 32, "lr_weights": 0.002, "loss": 0.002326005182621884, "acc": 96.798, "train_acc": 97.286, "val_acc": 95.25}
