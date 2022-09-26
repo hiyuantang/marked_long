@@ -49,3 +49,5 @@ train_model.py --model dalernn --width 1 --depth 128 --dataset mazes_medium --lr
 {"epoch": 45, "lr_weights": 0.0005, "loss": 0.0008351723156010849, "acc": 98.478, "train_acc": 98.664, "val_acc": 97.04}
 {"epoch": 46, "lr_weights": 0.0005, "loss": 0.000799154107698996, "acc": 98.548, "train_acc": 98.65, "val_acc": 96.96}
 {"epoch": 47, "lr_weights": 0.0005, "loss": 0.0007897045848731068, "acc": 98.558, "train_acc": 98.63, "val_acc": 96.83}
+{"epoch": 48, "lr_weights": 0.0005, "loss": 0.0007673689181283408, "acc": 98.554, "train_acc": 98.688, "val_acc": 96.75}
+{"epoch": 49, "lr_weights": 0.0005, "loss": 0.0007481261855427874, "acc": 98.602, "train_acc": 98.666, "val_acc": 96.86}
